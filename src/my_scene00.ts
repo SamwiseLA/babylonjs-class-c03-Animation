@@ -96,28 +96,10 @@ export default class MyScene {
   // Code for Scene
 
   async StartScene(): Promise<void> {
-    var textMesh = this.METHMod.DisplayText(
-      `app: ${this.appName} (CLICK TO TOGGLE MUSIC)`,
-      undefined,
-      undefined,
-      undefined,
-      "yellow",
-      "blue"
-    );
-    textMesh.position.y = .01;
-    textMesh.position.z = -4.85;
-    textMesh.scaling = new BABYLON.Vector3(3, 3, 3);
-    textMesh.rotation = new BABYLON.Vector3(
-      BABYLON.Tools.ToRadians(90),
-      BABYLON.Tools.ToRadians(0),
-      BABYLON.Tools.ToRadians(0)
-    );
-    textMesh.parent = this.ground;
 
     this.OBJMod.SpawnTestBox();
 
     this.OBJMod.EnvironmentNodes();
 
-    //await this.METHMod.DelayIt(1);
   }
 }

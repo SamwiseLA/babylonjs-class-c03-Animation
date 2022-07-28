@@ -78,6 +78,40 @@ export default class MySceneMethods {
     return mesh;
   }
 
+  PlaySoundInterval(uri: string = undefined, interval = 3, vol = .2) {
+    // Load Repeating the sound,
+    // give it time to load and play it every 3 seconds
+    //
+
+    var name = "bounce"
+
+    if (uri === undefined){
+      uri = "https://cdn-content-ingress.altvr.com/uploads/audio_clip/audio/1907681589261763077/" +
+        "ogg_321808__lloydevans09__pvc-pipe-hit-3.ogg";
+    } else {
+      const indexLast = uri.lastIndexOf("/");
+      if (indexLast === -1){
+        return
+      } else {
+        name = uri.substring(indexLast + 1);
+      }
+    }
+
+    const sound = new BABYLON.Sound(
+      name,
+      uri,
+      this.appMain._scene,
+      () => StartIntervalPlay(sound, interval),
+      { loop: false, autoplay: true, volume: vol }
+    );
+
+    function StartIntervalPlay(sound: BABYLON.Sound, interval: number): void {
+      interval = interval * 1000;
+      setInterval(() => sound.play(), interval);
+    }
+  
+  }
+
   public DelayIt = (secs: number) =>
     new Promise((res) => setTimeout(res, secs * 1000));
 }

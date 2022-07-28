@@ -45,6 +45,24 @@ export default class MySceneSetUp {
     this.appMain._camera.wheelPrecision = 20; //Mouse wheel speed
 
     //this.appMain._light.position = new BABYLON.Vector3(0, 150, 70);
+
+    var textMesh = this.appMain.METHMod.DisplayText(
+      `app: ${this.appMain.appName} (CLICK TO TOGGLE MUSIC)`,
+      undefined,
+      undefined,
+      undefined,
+      "yellow",
+      "blue"
+    );
+    textMesh.position.y = .01;
+    textMesh.position.z = -4.85;
+    textMesh.scaling = new BABYLON.Vector3(3, 3, 3);
+    textMesh.rotation = new BABYLON.Vector3(
+      BABYLON.Tools.ToRadians(90),
+      BABYLON.Tools.ToRadians(0),
+      BABYLON.Tools.ToRadians(0)
+    );
+    textMesh.parent = this.appMain.ground;
     
   }
 

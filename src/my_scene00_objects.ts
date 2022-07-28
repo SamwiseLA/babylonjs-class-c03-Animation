@@ -64,33 +64,8 @@ export default class MySceneObjects {
 
     this.appMain.ground.material = mat;
 
-    // Load the Sound
-    //
-    // and play it automatically once ready
-    //
-
-    //const uri =
-    //  "https://cdn-content-ingress.altvr.com/uploads/audio_clip/audio/1793021533619224851/ogg_220173__gameaudio__spacey-1up-power-up.ogg";
-
     const uri =
       "https://cdn-content-ingress.altvr.com/uploads/audio_clip/audio/1734282589813867336/ogg_Girl_From_Ipanema_-_Frank_Sinatra.ogg";
-
-    //this.appMain.music = new BABYLON.Sound("cello", "sounds/cellolong.wav", this.appMain._scene, null, { loop: true, autoplay: true });
-
-    //this.appMain.music = new BABYLON.Sound("sound2", uri, this.appMain._scene);
-
-    //this.IntervalSound();
-
-    //BABYLON.Engine.audioEngine.useCustomUnlockedButton = true
-
-    // var startMusic = new BABYLON.Sound(
-    //   "sound1",
-    //   uri,
-    //   this.appMain._scene,
-    //   null,
-    //   { loop: true, autoplay: true, volume: 0.05 }
-    // );
-    // BABYLON.Engine.audioEngine?.unlock()
 
     var playing = false;
     document.onclick = () => {
@@ -129,7 +104,7 @@ export default class MySceneObjects {
       { loop: false, autoplay: false, volume: 0.2 }
     );
 
-    this.appMain.METHMod.DelayIt(10);
+    this.appMain.METHMod.DelayIt(5);
 
     setInterval(() => bounce.play(), 3000);
   }
