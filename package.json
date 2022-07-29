@@ -21,7 +21,9 @@
     "typescript": "^3.9.7",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "^3.11.0",
+    "earcut": "^2.2.4"
+
   },
   "dependencies": {
     "accepts": "^1.3.8",
@@ -135,6 +137,7 @@
     "dns-txt": "^2.0.2",
     "domain-browser": "^1.2.0",
     "duplexify": "^3.7.1",
+    "earcut": "^2.2.4",
     "ee-first": "^1.1.1",
     "elliptic": "^6.5.4",
     "emoji-regex": "^7.0.3",
@@ -464,5 +467,13 @@
     "yallist": "^4.0.0",
     "yargs": "^13.3.2",
     "yargs-parser": "^13.1.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SamwiseLA/babylonjs-class-c03-Animation.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SamwiseLA/babylonjs-class-c03-Animation/issues"
+  },
+  "homepage": "https://github.com/SamwiseLA/babylonjs-class-c03-Animation#readme"
 }

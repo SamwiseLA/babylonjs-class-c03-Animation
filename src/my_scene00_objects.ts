@@ -2,6 +2,7 @@ import * as BABYLON from "babylonjs";
 import "@babylonjs/loaders/glTF";
 import "babylonjs-loaders";
 import MyScene from "./my_scene00";
+import earcut from "./earcut/src/earcut.js";
 
 export default class MySceneObjects {
   public appMain: MyScene;
@@ -34,18 +35,113 @@ export default class MySceneObjects {
     //this.appMain.box.scaling.x = .1;
     //this.appMain.box.scaling.z = 0.1;
 
-    const meshPosition = new BABYLON.Vector3(0, .7, -.5);
-    const meshScaling = new BABYLON.Vector3((1 / this.appMain.box.scaling.x), (1 / this.appMain.box.scaling.y), (1 / this.appMain.box.scaling.z));
+    const meshPosition = new BABYLON.Vector3(0, 0.7, -0.5);
+    const meshScaling = new BABYLON.Vector3(
+      1 / this.appMain.box.scaling.x,
+      1 / this.appMain.box.scaling.y,
+      1 / this.appMain.box.scaling.z
+    );
 
-    var textMesh = this.appMain.METHMod.DisplayText("Green Single Global Box", undefined,undefined,undefined, "black", "green");
+    var textMesh = this.appMain.METHMod.DisplayText(
+      "Green Single Global Box",
+      undefined,
+      undefined,
+      undefined,
+      "black",
+      "green"
+    );
     textMesh.position = meshPosition;
-    textMesh.scaling = meshScaling
-    textMesh.parent = this.appMain.box
+    textMesh.scaling = meshScaling;
+    textMesh.parent = this.appMain.box;
+  }
+
+  ExtrudeMesh(
+    bodyLength = 5,
+    bodyHeight = 2,
+    frontLength = 1.75,
+    bodyDepth = 0.2,
+    startX = 0,
+    startZ = 0,
+    showAngleMesh =  false
+  ): BABYLON.Mesh {
+    this.appMain.METHMod.DMM("ExtrudeMesh");
+    // Calc Mesh Extrude
+    const endZ = startZ + bodyHeight;
+
+    var startX2 = startX + bodyLength + frontLength;
+
+    const bodyStartX = startX + bodyLength;
+
+    const distZ = endZ - startZ;
+
+    const outline1 = [
+      new BABYLON.Vector3(startX, 0, startZ),
+      new BABYLON.Vector3(startX2, 0, startZ),
+    ];
+    const outline2 = [
+      new BABYLON.Vector3(startX, 0, startZ),
+      new BABYLON.Vector3(startX2, 0, startZ),
+    ];
+
+    //curved front
+    const extrudes = 20;
+
+    for (let i = 0; i < extrudes; i++) {
+      var posX = frontLength * Math.cos((i * Math.PI) / (extrudes * 2));
+      posX = frontLength - posX;
+      posX = startX2 - posX;
+      //const posz = distZ * Math.sin((i * Math.PI) / (extrudes * 2)) - frontLength
+      var posZ = distZ * Math.sin((i * Math.PI) / (extrudes * 2));
+      posZ = distZ - posZ;
+      posZ = endZ - posZ;
+      if (i === 0) {
+        posZ = startZ;
+      }
+
+      outline1.push(new BABYLON.Vector3(posX, 0, posZ));
+    }
+
+    //top
+    outline1.push(new BABYLON.Vector3(bodyStartX, 0, endZ));
+    outline1.push(new BABYLON.Vector3(startX, 0, endZ));
+
+    outline2.push(new BABYLON.Vector3(bodyStartX, 0, endZ));
+    outline2.push(new BABYLON.Vector3(startX, 0, endZ));
+    //back formed automatically
+
+    const extrudeMesh = BABYLON.MeshBuilder.ExtrudePolygon(
+      "extrudeMesh",
+      { shape: outline1, depth: bodyDepth },
+      this.appMain._scene,
+      earcut
+    );
+
+    extrudeMesh.position.y = 2;
+    extrudeMesh.rotation = new BABYLON.Vector3(
+      BABYLON.Tools.ToRadians(-90),
+      BABYLON.Tools.ToRadians(0),
+      BABYLON.Tools.ToRadians(0)
+    );
+
+    if (showAngleMesh) {
+      const extrudeMeshChild = BABYLON.MeshBuilder.ExtrudePolygon(
+        "extrudeMeshChild",
+        { shape: outline2, depth: bodyDepth },
+        this.appMain._scene,
+        earcut
+      );
+      extrudeMeshChild.parent = extrudeMesh;
+      extrudeMeshChild.position.y = -.5 - (bodyDepth - .2);
+    }
+
+    return 
+
   }
 
   // Environment Node Objects (Ground, Trees, Buildings, Sound)
 
   EnvironmentNodes(): void {
+    this.appMain.METHMod.DMM("EnvironmentNodes");
     // Ground
 
     this.appMain.ground = BABYLON.MeshBuilder.CreateGround("ground", {
@@ -69,10 +165,10 @@ export default class MySceneObjects {
 
     var playing = false;
     document.onclick = () => {
-      BABYLON.Engine.audioEngine?.unlock()
+      BABYLON.Engine.audioEngine?.unlock();
 
       if (playing) {
-        if (this.appMain.music){
+        if (this.appMain.music) {
           this.appMain.music.pause();
         }
       } else {
@@ -89,23 +185,5 @@ export default class MySceneObjects {
       }
       playing = !playing;
     };
-  }
-
-  IntervalSound() {
-    // Load Repeating the sound,
-    // give it time to load and play it every 3 seconds
-    //
-
-    const bounce = new BABYLON.Sound(
-      "bounce",
-      "https://cdn-content-ingress.altvr.com/uploads/audio_clip/audio/1907681589261763077/ogg_321808__lloydevans09__pvc-pipe-hit-3.ogg",
-      this.appMain._scene,
-      null,
-      { loop: false, autoplay: false, volume: 0.2 }
-    );
-
-    this.appMain.METHMod.DelayIt(5);
-
-    setInterval(() => bounce.play(), 3000);
   }
 }

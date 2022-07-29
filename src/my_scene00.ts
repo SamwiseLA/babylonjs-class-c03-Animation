@@ -10,7 +10,6 @@ import MySceneMethods from "./my_scene00_methods";
 import MySceneActions from "./my_scene00_actions";
 
 export default class MyScene {
-
   public appName: string;
 
   public _canvas: HTMLCanvasElement;
@@ -96,10 +95,15 @@ export default class MyScene {
   // Code for Scene
 
   async StartScene(): Promise<void> {
-
     this.OBJMod.SpawnTestBox();
 
     this.OBJMod.EnvironmentNodes();
 
+    const extrudedMesh = this.OBJMod.ExtrudeMesh(4, 2, 4, 1, -3, 0, true);
+    const extText = this.METHMod.DisplayText("Extruded Mesh Paired with Not Extruded Child");
+    extText.parent = extrudedMesh;
+    extText.position.y = 3
+    extText.position.z = -.05
+    extText.scaling = new BABYLON.Vector3(3,3,3)
   }
 }
