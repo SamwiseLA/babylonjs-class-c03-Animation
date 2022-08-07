@@ -61,19 +61,26 @@ export default class MySceneObjects {
     var manager = new GUI.GUI3DManager();
     // Text only button
 
+    const onTexture = "https://raw.githubusercontent.com/microsoft/MixedRealityToolkit-Unity/main/Assets/MRTK/SDK/StandardAssets/Textures/IconSwitchOn.png";
+    const offTexture = "https://raw.githubusercontent.com/microsoft/MixedRealityToolkit-Unity/main/Assets/MRTK/SDK/StandardAssets/Textures/IconSwitchOff.png";
+
     var touchHoloTextButton = new GUI.HolographicButton("TouchHoloTextButton");
     manager.addControl(touchHoloTextButton);
+    
     touchHoloTextButton.position = new BABYLON.Vector3(0, .5, -2);
-    const unClicked = "Click Me!"
+    const unClicked = "Click Me! On"
     touchHoloTextButton.text = unClicked;
+    touchHoloTextButton.imageUrl = offTexture;
     touchHoloTextButton.onPointerDownObservable.add(() => {
         this.appMain.METHMod.PlaySound();
         //alert("I was Clicked!!!")
         
         if (touchHoloTextButton.text === unClicked){
-          touchHoloTextButton.text = "YAY!!! (Click Again)";
+          touchHoloTextButton.imageUrl = onTexture
+          touchHoloTextButton.text = "Click Me! Off";
         } else {
           touchHoloTextButton.text = unClicked;
+          touchHoloTextButton.imageUrl = offTexture
         }
 
     });
