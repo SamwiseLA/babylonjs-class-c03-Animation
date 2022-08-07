@@ -3,6 +3,7 @@ import "@babylonjs/loaders/glTF";
 import "babylonjs-loaders";
 import MyScene from "./my_scene00";
 import earcut from "./earcut/src/earcut.js";
+import * as GUI from "babylonjs-gui";
 
 export default class MySceneObjects {
   public appMain: MyScene;
@@ -53,6 +54,30 @@ export default class MySceneObjects {
     textMesh.position = meshPosition;
     textMesh.scaling = meshScaling;
     textMesh.parent = this.appMain.box;
+
+  }
+
+  SpawnButton(): void {
+    var manager = new GUI.GUI3DManager();
+    // Text only button
+
+    var touchHoloTextButton = new GUI.HolographicButton("TouchHoloTextButton");
+    manager.addControl(touchHoloTextButton);
+    touchHoloTextButton.position = new BABYLON.Vector3(0, .5, -2);
+    const unClicked = "Click Me!"
+    touchHoloTextButton.text = unClicked;
+    touchHoloTextButton.onPointerDownObservable.add(() => {
+        this.appMain.METHMod.PlaySound();
+        //alert("I was Clicked!!!")
+        
+        if (touchHoloTextButton.text === unClicked){
+          touchHoloTextButton.text = "YAY!!! (Click Again)";
+        } else {
+          touchHoloTextButton.text = unClicked;
+        }
+
+    });
+
   }
 
   ExtrudeMesh(
@@ -66,6 +91,10 @@ export default class MySceneObjects {
   ): BABYLON.Mesh {
     this.appMain.METHMod.DMM("ExtrudeMesh");
     // Calc Mesh Extrude
+
+    const extMat = new BABYLON.StandardMaterial("ExtMat", this.appMain._scene)
+    extMat.diffuseColor = BABYLON.Color3.Yellow();
+
     const endZ = startZ + bodyHeight;
 
     var startX2 = startX + bodyLength + frontLength;
@@ -115,6 +144,8 @@ export default class MySceneObjects {
       this.appMain._scene,
       earcut
     );
+
+    extrudeMesh.material = extMat
 
     extrudeMesh.position.y = 2;
     extrudeMesh.rotation = new BABYLON.Vector3(

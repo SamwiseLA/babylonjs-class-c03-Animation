@@ -97,6 +97,8 @@ export default class MyScene {
   async StartScene(): Promise<void> {
     this.OBJMod.SpawnTestBox();
 
+    this.OBJMod.SpawnButton();
+
     this.OBJMod.EnvironmentNodes();
 
     const extrudedMesh = this.OBJMod.ExtrudeMesh(4, 2, 4, 1, -3, 0, true);
