@@ -86,8 +86,7 @@ export default class MySceneMethods {
     var name = "bounce"
 
     if (uri === undefined){
-      uri = "https://cdn-content-ingress.altvr.com/uploads/audio_clip/audio/1907681589261763077/" +
-        "ogg_321808__lloydevans09__pvc-pipe-hit-3.ogg";
+      uri = "https://dl.dropbox.com/s/4vma3tiuqa6bl86/448081__breviceps__tic-toc-click.wav";
     } else {
       const indexLast = uri.lastIndexOf("/");
       if (indexLast === -1){
