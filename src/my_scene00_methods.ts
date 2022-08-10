@@ -5,6 +5,7 @@ import MyScene from "./my_scene00";
 
 export default class MySceneMethods {
   public appMain: MyScene;
+  public sound: BABYLON.Sound;
 
   TestModule(): void {
     console.log(`>=====>\n      In Module: ${this.constructor.name}\n>=====>`);
@@ -78,15 +79,16 @@ export default class MySceneMethods {
     return mesh;
   }
 
-  PlaySound(uri: string = undefined, vol = .2) {
+  async PlaySound(uri: string = undefined, vol = .2) {
     // Load Repeating the sound,
     // give it time to load and play it every 3 seconds
     //
 
-    var name = "bounce"
+    var name = "click"
 
     if (uri === undefined){
       uri = "https://dl.dropbox.com/s/4vma3tiuqa6bl86/448081__breviceps__tic-toc-click.wav";
+      uri = "https://dl.dropbox.com/s/sduaedufegwqxdk/569621__selinam21__sound-5.mp3"
     } else {
       const indexLast = uri.lastIndexOf("/");
       if (indexLast === -1){
@@ -96,11 +98,15 @@ export default class MySceneMethods {
       }
     }
 
-    const sound = new BABYLON.Sound(
+    if (this.sound !== undefined){
+      await this.sound.dispose();
+    }
+
+    this.sound = new BABYLON.Sound(
       name,
       uri,
       this.appMain._scene,
-      () => StartPlay(sound),
+      () => StartPlay(this.sound),
       { loop: false, autoplay: true, volume: vol }
     );
 
