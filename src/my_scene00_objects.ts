@@ -199,8 +199,8 @@ export default class MySceneObjects {
     this.appMain.ground.material = mat;
 
     const uri =
-      "https://cdn-content-ingress.altvr.com/uploads/audio_clip/audio/1734282589813867336/ogg_Girl_From_Ipanema_-_Frank_Sinatra.ogg";
-
+      //"https://cdn-content-ingress.altvr.com/uploads/audio_clip/audio/1734282589813867336/ogg_Girl_From_Ipanema_-_Frank_Sinatra.ogg";
+      "https://dl.dropbox.com/s/rgm7xqiguux0t0d/Girl%20From%20Ipanema%20-%20Frank%20Sinatra.mp3"
     var playing = false;
     document.onclick = () => {
       BABYLON.Engine.audioEngine?.unlock();

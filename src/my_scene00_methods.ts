@@ -88,7 +88,8 @@ export default class MySceneMethods {
 
     if (uri === undefined){
       uri = "https://dl.dropbox.com/s/4vma3tiuqa6bl86/448081__breviceps__tic-toc-click.wav";
-      uri = "https://dl.dropbox.com/s/sduaedufegwqxdk/569621__selinam21__sound-5.mp3"
+      //Test mp3 - they work fine on Desktop & ios - ogg's have issues
+      //uri = "https://dl.dropbox.com/s/sduaedufegwqxdk/569621__selinam21__sound-5.mp3"
     } else {
       const indexLast = uri.lastIndexOf("/");
       if (indexLast === -1){
