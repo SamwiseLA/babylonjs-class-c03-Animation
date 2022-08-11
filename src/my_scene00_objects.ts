@@ -7,6 +7,7 @@ import * as GUI from "babylonjs-gui";
 
 export default class MySceneObjects {
   public appMain: MyScene;
+  public playing = false;
 
   TestModule(): void {
     console.log(`>=====>\n      In Module: ${this.constructor.name}\n>=====>`);
@@ -68,16 +69,17 @@ export default class MySceneObjects {
     manager.addControl(touchHoloTextButton);
     
     touchHoloTextButton.position = new BABYLON.Vector3(0, .5, -2);
-    const unClicked = "Click Me! On"
+    const unClicked = "Click Music! On"
     touchHoloTextButton.text = unClicked;
     touchHoloTextButton.imageUrl = offTexture;
     touchHoloTextButton.onPointerDownObservable.add(() => {
         this.appMain.METHMod.PlaySound();
         //alert("I was Clicked!!!")
+        this.EnvironmentSound();
         
         if (touchHoloTextButton.text === unClicked){
           touchHoloTextButton.imageUrl = onTexture
-          touchHoloTextButton.text = "Click Me! Off";
+          touchHoloTextButton.text = "Click Music! Off";
         } else {
           touchHoloTextButton.text = unClicked;
           touchHoloTextButton.imageUrl = offTexture
@@ -198,30 +200,32 @@ export default class MySceneObjects {
 
     this.appMain.ground.material = mat;
 
-    const uri =
-      //"https://cdn-content-ingress.altvr.com/uploads/audio_clip/audio/1734282589813867336/ogg_Girl_From_Ipanema_-_Frank_Sinatra.ogg";
-      "https://dl.dropbox.com/s/rgm7xqiguux0t0d/Girl%20From%20Ipanema%20-%20Frank%20Sinatra.mp3"
-    var playing = false;
-    document.onclick = () => {
-      BABYLON.Engine.audioEngine?.unlock();
+  }
 
-      if (playing) {
-        if (this.appMain.music) {
-          this.appMain.music.pause();
-        }
-      } else {
-        if (!this.appMain.music) {
-          this.appMain.music = new BABYLON.Sound(
-            "sound1",
-            uri,
-            this.appMain._scene,
-            null,
-            { loop: true, autoplay: true, volume: 0.05 }
-          );
-        }
-        this.appMain.music.play();
+  EnvironmentSound(): void {
+
+    const uri =
+    "https://dl.dropbox.com/s/rgm7xqiguux0t0d/Girl%20From%20Ipanema%20-%20Frank%20Sinatra.mp3"
+
+    BABYLON.Engine.audioEngine?.unlock();
+
+    if (this.playing) {
+      if (this.appMain.music) {
+        this.appMain.music.pause();
       }
-      playing = !playing;
-    };
+    } else {
+      if (!this.appMain.music) {
+        this.appMain.music = new BABYLON.Sound(
+          "sound1",
+          uri,
+          this.appMain._scene,
+          null,
+          { loop: true, autoplay: true, volume: 0.05 }
+        );
+      }
+      this.appMain.music.play();
+    }
+    this.playing = !this.playing;
+
   }
 }
