@@ -89,6 +89,59 @@ export default class MySceneObjects {
 
   }
 
+  BuildCar() : BABYLON.Mesh {
+    const carMat = new BABYLON.StandardMaterial("carMat", this.appMain._scene);
+    carMat.diffuseColor = BABYLON.Color3.Blue();
+
+    const wheelMat = new BABYLON.StandardMaterial("carMat", this.appMain._scene);
+    wheelMat.diffuseColor = BABYLON.Color3.Black();
+
+    const carBodyLen = 3.5;
+    const carBodyHgt = 1.25;
+    const carFrontLen = 3;
+    const carBodyDepth = 2;
+
+    const carBodyMesh = this.appMain.OBJMod.ExtrudeMesh(carBodyLen, carBodyHgt, carFrontLen, carBodyDepth, -3, -3);
+    carBodyMesh.material = carMat;
+
+    carBodyMesh.scaling = new BABYLON.Vector3(.5,.5,.5)
+    const carBodyText = this.appMain.METHMod.DisplayText("Extruded Mesh for Car Body & CreateCylinder for Wheels");
+    carBodyText.parent = carBodyMesh;
+    carBodyText.position.y = .05
+    carBodyText.position.z = -2
+    carBodyText.rotation.x = BABYLON.Tools.ToRadians(90)
+
+    carBodyText.scaling = new BABYLON.Vector3(3,3,3)
+
+    const wheels: BABYLON.Mesh[]  = [undefined, undefined, undefined, undefined];
+
+    wheels[0] = this.BuildWheels(carBodyLen / 4, .4)
+    wheels[0].parent = carBodyMesh;
+    wheels[0].name = "wheelLF"
+    wheels[0].material = wheelMat;
+    wheels[0].position.x = (carBodyMesh.position.x + ((carBodyLen + carFrontLen) / 2)) - (carBodyLen / 4);
+    wheels[0].position.y =  - (carBodyDepth) ;
+    wheels[0].position.z = -3;
+
+    wheels[1] =  wheels[0].clone("wheelLB");
+    wheels[1].position.x = -wheels[0].position.x
+
+    wheels[2] =  wheels[0].clone("wheelRF");
+    wheels[2].position.y =   0
+
+    wheels[3] =  wheels[2].clone("wheelLB");
+    wheels[3].position.x = -wheels[2].position.x
+
+    return carBodyMesh
+
+  }
+
+  BuildWheels(diam = .125, hgt = .05): BABYLON.Mesh {
+    const wheelRB = BABYLON.MeshBuilder.CreateCylinder("wheelRB", {diameter: diam, height: hgt})
+
+    return wheelRB
+  }
+
   ExtrudeMesh(
     bodyLength = 5,
     bodyHeight = 2,
@@ -174,7 +227,7 @@ export default class MySceneObjects {
       extrudeMeshChild.position.y = -.5 - (bodyDepth - .2);
     }
 
-    return 
+    return extrudeMesh
 
   }
 

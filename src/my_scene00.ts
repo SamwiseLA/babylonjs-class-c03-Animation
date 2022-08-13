@@ -104,8 +104,14 @@ export default class MyScene {
     const extrudedMesh = this.OBJMod.ExtrudeMesh(4, 2, 4, 1, -3, 0, true);
     const extText = this.METHMod.DisplayText("Extruded Mesh Paired with Not Extruded Child");
     extText.parent = extrudedMesh;
-    extText.position.y = 3
-    extText.position.z = -.05
+    extText.position.y = 0.05
+    extText.position.z = 0
+    extText.rotation.x = BABYLON.Tools.ToRadians(90)
     extText.scaling = new BABYLON.Vector3(3,3,3)
+
+    const car = this.OBJMod.BuildCar();
+    car.position = new BABYLON.Vector3(2.25,1.75,-4);
+    car.rotation.y = BABYLON.Tools.ToRadians(45);
+
   }
 }
