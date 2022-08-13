@@ -91,8 +91,9 @@ export default class MySceneObjects {
 
   BuildCar() : BABYLON.Mesh {
     const carMat = new BABYLON.StandardMaterial("carMat", this.appMain._scene);
-    carMat.diffuseColor = new BABYLON.Color3(0,150/255,1);
-    carMat.diffuseTexture = new BABYLON.Texture("https://assets.babylonjs.com/environments/car.png", this.appMain._scene);
+    //carMat.diffuseColor = new BABYLON.Color3(0,150/255,1);
+    //carMat.diffuseTexture = new BABYLON.Texture("https://assets.babylonjs.com/environments/car.png", this.appMain._scene);
+    carMat.diffuseTexture = new BABYLON.Texture("https://dl.dropbox.com/s/6wjwucpcrwuer61/as_car.png", this.appMain._scene);
 
     const wheelMat = new BABYLON.StandardMaterial("carMat", this.appMain._scene);
     wheelMat.diffuseColor = new BABYLON.Color3(1,200/255,0);
