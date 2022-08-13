@@ -11,7 +11,6 @@ export default class MySceneSetUp {
   }
   // Set Up Scene/Camera/Lighting
   SetUpScene(): void {
-
     this.appMain._scene = new BABYLON.Scene(this.appMain._engine);
 
     this.appMain._scene.ambientColor = new BABYLON.Color3(0.3, 0.3, 0.3);
@@ -37,9 +36,16 @@ export default class MySceneSetUp {
       BABYLON.Angle.FromDegrees(45).radians()
     );
 
+    const lightReflectionDir = new BABYLON.Vector3(-.75, 1, 0);
+
     //this.appMain._light = new BABYLON.DirectionalLight("dir01", lightDir, this.appMain._scene);
-    this.appMain._light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), this.appMain._scene);
-    
+    //this.appMain._light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), this.appMain._scene);
+    this.appMain._light = new BABYLON.HemisphericLight(
+      "light",
+      lightReflectionDir,
+      this.appMain._scene
+    );
+
     this.appMain._light.intensity = 0.75;
 
     this.appMain._camera.wheelPrecision = 20; //Mouse wheel speed
@@ -54,7 +60,7 @@ export default class MySceneSetUp {
       "yellow",
       "blue"
     );
-    textMesh.position.y = .01;
+    textMesh.position.y = 0.01;
     textMesh.position.z = -4.85;
     textMesh.scaling = new BABYLON.Vector3(3, 3, 3);
     textMesh.rotation = new BABYLON.Vector3(
@@ -63,7 +69,6 @@ export default class MySceneSetUp {
       BABYLON.Tools.ToRadians(0)
     );
     textMesh.parent = this.appMain.ground;
-    
   }
 
   doRender(): void {
@@ -77,5 +82,4 @@ export default class MySceneSetUp {
       this.appMain._engine.resize();
     });
   }
-
 }

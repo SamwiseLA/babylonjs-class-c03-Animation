@@ -91,24 +91,26 @@ export default class MySceneObjects {
 
   BuildCar() : BABYLON.Mesh {
     const carMat = new BABYLON.StandardMaterial("carMat", this.appMain._scene);
-    carMat.diffuseColor = BABYLON.Color3.Blue();
+    carMat.diffuseColor = new BABYLON.Color3(0,150/255,1);
+    carMat.diffuseTexture = new BABYLON.Texture("https://assets.babylonjs.com/environments/car.png", this.appMain._scene);
 
     const wheelMat = new BABYLON.StandardMaterial("carMat", this.appMain._scene);
-    wheelMat.diffuseColor = BABYLON.Color3.Black();
+    wheelMat.diffuseColor = new BABYLON.Color3(1,200/255,0);
+    wheelMat.diffuseTexture = new BABYLON.Texture("https://assets.babylonjs.com/environments/wheel.png", this.appMain._scene);
 
     const carBodyLen = 3.5;
     const carBodyHgt = 1.25;
     const carFrontLen = 3;
     const carBodyDepth = 2;
 
-    const carBodyMesh = this.appMain.OBJMod.ExtrudeMesh(carBodyLen, carBodyHgt, carFrontLen, carBodyDepth, -3, -3);
+    const carBodyMesh = this.ExtrudeMesh(carBodyLen, carBodyHgt, carFrontLen, carBodyDepth, -3, -3);
     carBodyMesh.material = carMat;
 
     carBodyMesh.scaling = new BABYLON.Vector3(.5,.5,.5)
     const carBodyText = this.appMain.METHMod.DisplayText("Extruded Mesh for Car Body & CreateCylinder for Wheels");
     carBodyText.parent = carBodyMesh;
     carBodyText.position.y = .05
-    carBodyText.position.z = -2
+    carBodyText.position.z = -2.8
     carBodyText.rotation.x = BABYLON.Tools.ToRadians(90)
 
     carBodyText.scaling = new BABYLON.Vector3(3,3,3)
@@ -200,9 +202,15 @@ export default class MySceneObjects {
     outline2.push(new BABYLON.Vector3(startX, 0, endZ));
     //back formed automatically
 
+    //face UVs
+    const faceUV = [];
+    faceUV[0] = new BABYLON.Vector4(0, 0.5, 0.38, 1);
+    faceUV[1] = new BABYLON.Vector4(0, 0, 1, 0.5);
+    faceUV[2] = new BABYLON.Vector4(0.38, 1, 0, 0.5);
+
     const extrudeMesh = BABYLON.MeshBuilder.ExtrudePolygon(
       "extrudeMesh",
-      { shape: outline1, depth: bodyDepth },
+      { shape: outline1, depth: bodyDepth, faceUV: faceUV, wrap: true },
       this.appMain._scene,
       earcut
     );
