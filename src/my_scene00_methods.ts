@@ -5,7 +5,7 @@ import MyScene from "./my_scene00";
 
 export default class MySceneMethods {
   public appMain: MyScene;
-  public sound: BABYLON.Sound;
+  public sound: BABYLON.Sound[] = [undefined];
 
   TestModule(): void {
     console.log(`>=====>\n      In Module: ${this.constructor.name}\n>=====>`);
@@ -35,12 +35,12 @@ export default class MySceneMethods {
     const widthCalc = textLen / 45;
 
     var widthUse = width;
-    if (width === 0){
+    if (width === 0) {
       widthUse = widthCalc;
     }
 
     const groundWidth = 4 * (widthUse / 4);
-    const groundHeight = .07;
+    const groundHeight = 0.07;
 
     const mesh = BABYLON.MeshBuilder.CreatePlane(
       "textMesh",
@@ -49,12 +49,12 @@ export default class MySceneMethods {
     );
 
     //Create dynamic texture
-    const resolution = (512 + 256);
-    const resolutionAdj = (512 + 256) / (4 / groundWidth)
-    const textWidth = (resolutionAdj * 3);
-    const textHeight = (resolution / 2) / 8;
+    const resolution = 512 + 256;
+    const resolutionAdj = (512 + 256) / (4 / groundWidth);
+    const textWidth = resolutionAdj * 3;
+    const textHeight = resolution / 2 / 8;
 
-    var textureText = new BABYLON.DynamicTexture( 
+    var textureText = new BABYLON.DynamicTexture(
       "dynamicTextureText",
       { width: textWidth, height: textHeight },
       this.appMain._scene,
@@ -66,8 +66,8 @@ export default class MySceneMethods {
       "matText",
       this.appMain._scene
     );
-    
-    materialText. disableLighting = true;
+
+    materialText.disableLighting = true;
     materialText.emissiveColor = BABYLON.Color3.White();
 
     //Add text to dynamic texture
@@ -79,58 +79,77 @@ export default class MySceneMethods {
     return mesh;
   }
 
-  async PlaySound(uri: string = undefined, vol = .2) {
+  async PlaySound(
+    uri: string = undefined,
+    vol = 0.2,
+    loop = false,
+    soundIndex = 0
+  ) {
     // Load Repeating the sound,
     // give it time to load and play it every 3 seconds
     //
 
-    var name = "click"
+    var name = "click";
 
-    if (uri === undefined){
-      uri = "https://dl.dropbox.com/s/4vma3tiuqa6bl86/448081__breviceps__tic-toc-click.wav";
+    if (uri === undefined) {
+      uri =
+        "https://dl.dropbox.com/s/4vma3tiuqa6bl86/448081__breviceps__tic-toc-click.wav";
       //Test mp3 - they work fine on Desktop & ios - ogg's have issues
       //uri = "https://dl.dropbox.com/s/sduaedufegwqxdk/569621__selinam21__sound-5.mp3"
     } else {
       const indexLast = uri.lastIndexOf("/");
-      if (indexLast === -1){
-        return
+      if (indexLast === -1) {
+        return;
       } else {
         name = uri.substring(indexLast + 1);
       }
     }
 
-    if (this.sound !== undefined){
-      await this.sound.dispose();
+    if (this.sound !== undefined) {
+      if (this.sound[soundIndex] !== undefined) {
+        await this.sound[soundIndex].dispose();
+      }
     }
 
-    this.sound = new BABYLON.Sound(
+    if (soundIndex > 0) {
+      if (this.sound[soundIndex] === undefined) {
+        let cnt = this.sound.length;
+        for (let i = 0; i <= soundIndex; i++) {
+          if (this.sound[i] === undefined) {
+            this.sound.push(undefined);
+          }
+        }
+      }
+    }
+
+    this.sound[soundIndex] = new BABYLON.Sound(
       name,
       uri,
       this.appMain._scene,
-      () => StartPlay(this.sound),
-      { loop: false, autoplay: true, volume: vol }
+      () => StartPlay(this.sound[soundIndex]),
+      { loop: loop, autoplay: true, volume: vol }
     );
 
     function StartPlay(sound: BABYLON.Sound): void {
       sound.play();
     }
-  
   }
 
-  PlaySoundInterval(uri: string = undefined, interval = 3, vol = .2) {
+  PlaySoundInterval(uri: string = undefined, interval = 3, vol = 0.2) {
     // Load Repeating the sound,
     // give it time to load and play it every 3 seconds
     //
 
-    var name = "bounce"
+    var name = "bounce";
 
-    if (uri === undefined){
-      uri = "https://cdn-content-ingress.altvr.com/uploads/audio_clip/audio/1907681589261763077/" +
+    if (uri === undefined) {
+      uri =
+        "https://cdn-content-ingress.altvr.com/uploads/audio_clip/audio/1907681589261763077/" +
         "ogg_321808__lloydevans09__pvc-pipe-hit-3.ogg";
     } else {
       const indexLast = uri.lastIndexOf("/");
-      if (indexLast === -1){
-        return
+      if (indexLast === -1) {
+        return;
       } else {
         name = uri.substring(indexLast + 1);
       }
@@ -148,7 +167,6 @@ export default class MySceneMethods {
       interval = interval * 1000;
       setInterval(() => sound.play(), interval);
     }
-  
   }
 
   public DelayIt = (secs: number) =>
