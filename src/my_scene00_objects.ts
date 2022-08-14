@@ -59,6 +59,9 @@ export default class MySceneObjects {
   }
 
   SpawnButton(): void {
+  
+    this.appMain.METHMod.DMM("SpawnButton");
+
     var manager = new GUI.GUI3DManager();
     // Text only button
 
@@ -89,7 +92,47 @@ export default class MySceneObjects {
 
   }
 
+  SpawnButtonWheelAnimation(): void {
+
+    this.appMain.METHMod.DMM("SpawnButtonWheelAnimation");
+
+    var manager = new GUI.GUI3DManager();
+    // Text only button
+
+    const onTexture = "https://raw.githubusercontent.com/microsoft/MixedRealityToolkit-Unity/main/Assets/MRTK/SDK/StandardAssets/Textures/IconSwitchOn.png";
+    const offTexture = "https://raw.githubusercontent.com/microsoft/MixedRealityToolkit-Unity/main/Assets/MRTK/SDK/StandardAssets/Textures/IconSwitchOff.png";
+
+    var touchHoloTextButton = new GUI.HolographicButton("TouchHoloTextButton");
+    manager.addControl(touchHoloTextButton);
+    
+    touchHoloTextButton.position = new BABYLON.Vector3(2.25, .125, -4.25);
+    touchHoloTextButton.scaling = new BABYLON.Vector3(.25, .25, .25);
+    touchHoloTextButton.mesh.rotation.y = BABYLON.Tools.ToRadians(45); 
+
+    const unClicked = "Click Wheels! On"
+    touchHoloTextButton.text = unClicked;
+    touchHoloTextButton.imageUrl = offTexture;
+    touchHoloTextButton.onPointerDownObservable.add(() => {
+        this.appMain.METHMod.PlaySound();
+        this.appMain.ACTMod.ToggleWheelAnimation();
+        
+        if (touchHoloTextButton.text === unClicked){
+          touchHoloTextButton.imageUrl = onTexture
+          touchHoloTextButton.text = "Click Wheels! Off";
+        } else {
+          touchHoloTextButton.text = unClicked;
+          touchHoloTextButton.imageUrl = offTexture
+        }
+
+    });
+
+  }
+
+
   BuildCar() : BABYLON.Mesh {
+
+    this.appMain.METHMod.DMM("BuildCar");
+
     const carMat = new BABYLON.StandardMaterial("carMat", this.appMain._scene);
     //carMat.diffuseColor = new BABYLON.Color3(0,150/255,1);
     //carMat.diffuseTexture = new BABYLON.Texture("https://assets.babylonjs.com/environments/car.png", this.appMain._scene);
@@ -116,33 +159,63 @@ export default class MySceneObjects {
 
     carBodyText.scaling = new BABYLON.Vector3(3,3,3)
 
-    const wheels: BABYLON.Mesh[]  = [undefined, undefined, undefined, undefined];
+    this.appMain.wheels[0] = this.BuildWheels(carBodyLen / 4, .4)
+    this.appMain.wheels[0].parent = carBodyMesh;
+    this.appMain.wheels[0].name = "wheelLF"
+    this.appMain.wheels[0].material = wheelMat;
+    this.appMain.wheels[0].position.x = (carBodyMesh.position.x + ((carBodyLen + carFrontLen) / 2)) - (carBodyLen / 4);
+    this.appMain.wheels[0].position.y =  - (carBodyDepth) ;
+    this.appMain.wheels[0].position.z = -3;
 
-    wheels[0] = this.BuildWheels(carBodyLen / 4, .4)
-    wheels[0].parent = carBodyMesh;
-    wheels[0].name = "wheelLF"
-    wheels[0].material = wheelMat;
-    wheels[0].position.x = (carBodyMesh.position.x + ((carBodyLen + carFrontLen) / 2)) - (carBodyLen / 4);
-    wheels[0].position.y =  - (carBodyDepth) ;
-    wheels[0].position.z = -3;
+    this.appMain.wheels[1] =  this.appMain.wheels[0].clone("wheelLB");
+    this.appMain.wheels[1].position.x = -this.appMain.wheels[0].position.x
+    //Bthis.appMain._scene.beginAnimation(this.appMain.wheels[1], 0, 30, true);
 
-    wheels[1] =  wheels[0].clone("wheelLB");
-    wheels[1].position.x = -wheels[0].position.x
+    this.appMain.wheels[2] =  this.appMain.wheels[0].clone("wheelRF");
+    this.appMain.wheels[2].position.y =   0
+    //this.appMain._scene.beginAnimation(this.appMain.wheels[2], 0, 30, true);
 
-    wheels[2] =  wheels[0].clone("wheelRF");
-    wheels[2].position.y =   0
-
-    wheels[3] =  wheels[2].clone("wheelLB");
-    wheels[3].position.x = -wheels[2].position.x
+    this.appMain.wheels[3] =  this.appMain.wheels[2].clone("wheelLB");
+    this.appMain.wheels[3].position.x = -this.appMain.wheels[2].position.x
+    //this.appMain._scene.beginAnimation(this.appMain.wheels[3], 0, 30, true);
 
     return carBodyMesh
 
   }
 
   BuildWheels(diam = .125, hgt = .05): BABYLON.Mesh {
-    const wheelRB = BABYLON.MeshBuilder.CreateCylinder("wheelRB", {diameter: diam, height: hgt})
 
-    return wheelRB
+    this.appMain.METHMod.DMM("BuildWheels");
+
+    const wheel = BABYLON.MeshBuilder.CreateCylinder("wheelRB", {diameter: diam, height: hgt})
+
+    //Animate the Wheels
+    const animWheel = new BABYLON.Animation("wheelAnimation", "rotation.y", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+
+    const wheelKeys = []; 
+
+    //At the animation key 0, the value of rotation.y is 0
+    wheelKeys.push({
+        frame: 0,
+        value: 0
+    });
+
+    //At the animation key 30, (after 1 sec since animation fps = 30) the value of rotation.y is 2PI for a complete rotation
+    wheelKeys.push({
+        frame: 30,
+        value: 2 * Math.PI
+    });
+
+    //set the keys
+    animWheel.setKeys(wheelKeys);
+
+    //Link this animation to a wheel
+    wheel.animations = [];
+    wheel.animations.push(animWheel);
+
+    //this.appMain._scene.beginAnimation(wheel, 0, 30, true);
+
+    return wheel
   }
 
   ExtrudeMesh(
@@ -265,6 +338,8 @@ export default class MySceneObjects {
   }
 
   EnvironmentSound(): void {
+
+    this.appMain.METHMod.DMM("EnvironmentSound");
 
     const uri =
     "https://dl.dropbox.com/s/rgm7xqiguux0t0d/Girl%20From%20Ipanema%20-%20Frank%20Sinatra.mp3"

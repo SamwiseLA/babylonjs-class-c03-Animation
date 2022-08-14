@@ -10,4 +10,21 @@ export default class MySceneActions {
     console.log(`>=====>\n      In Module: ${this.constructor.name}\n>=====>`);
   }
 
+  ToggleWheelAnimation(): void {
+    this.appMain.METHMod.DMM("ToggleWheelAnimation");
+
+    for (let i = 0; i < 4; i++) {
+      if (this.appMain.isWheelsSpinning) {
+        this.appMain._scene.beginAnimation(
+          this.appMain.wheels[i],
+          0,
+          0,
+          false
+        );
+      } else {
+        this.appMain._scene.beginAnimation(this.appMain.wheels[i], 0, 30, true);
+      }
+    }
+    this.appMain.isWheelsSpinning = !this.appMain.isWheelsSpinning;
+  }
 }

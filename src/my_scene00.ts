@@ -35,11 +35,12 @@ export default class MyScene {
   ////////////////////////////////
 
   public box: BABYLON.Mesh;
-  public barn: BABYLON.Mesh[] = [undefined];
+  //public barn: BABYLON.Mesh[] = [undefined];
 
-  public yeti: BABYLON.AbstractMesh[] = [undefined, undefined, undefined];
-  public alien: BABYLON.AbstractMesh = undefined;
-  public object: BABYLON.AbstractMesh[] = [undefined, undefined, undefined];
+  //public object: BABYLON.AbstractMesh[] = [undefined, undefined, undefined];
+
+  public wheels: BABYLON.Mesh[] = [undefined, undefined, undefined, undefined];
+  public isWheelsSpinning = false;
 
   public ground: BABYLON.Mesh;
   public music: BABYLON.Sound;
@@ -102,16 +103,19 @@ export default class MyScene {
     this.OBJMod.EnvironmentNodes();
 
     const extrudedMesh = this.OBJMod.ExtrudeMesh(4, 2, 4, 1, -3, 0, true);
-    const extText = this.METHMod.DisplayText("Extruded Mesh Paired with Not Extruded Child");
+    const extText = this.METHMod.DisplayText(
+      "Extruded Mesh Paired with Not Extruded Child"
+    );
     extText.parent = extrudedMesh;
-    extText.position.y = 0.05
-    extText.position.z = 0
-    extText.rotation.x = BABYLON.Tools.ToRadians(90)
-    extText.scaling = new BABYLON.Vector3(3,3,3)
+    extText.position.y = 0.05;
+    extText.position.z = 0;
+    extText.rotation.x = BABYLON.Tools.ToRadians(90);
+    extText.scaling = new BABYLON.Vector3(3, 3, 3);
 
     const car = this.OBJMod.BuildCar();
-    car.position = new BABYLON.Vector3(2.25,1.75,-4);
+    car.position = new BABYLON.Vector3(2.25, 1.75, -4);
     car.rotation.y = BABYLON.Tools.ToRadians(45);
 
+    this.OBJMod.SpawnButtonWheelAnimation();
   }
 }
