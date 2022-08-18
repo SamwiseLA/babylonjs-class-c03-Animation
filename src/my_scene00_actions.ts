@@ -77,7 +77,7 @@ export default class MySceneActions {
       });
 
       objectKeys.push({
-        frame: Math.ceil(endFrame),
+        frame: endFrame,
         value: xStart,
       });
 
