@@ -13,22 +13,22 @@ export default class MySceneObjects {
     console.log(`>=====>\n      In Module: ${this.constructor.name}\n>=====>`);
   }
 
-  SpawnTestBox(): void {
+  SpawnTestBox(): BABYLON.Mesh {
     this.appMain.METHMod.DMM("SpawnBox");
 
     const mat = new BABYLON.StandardMaterial("Material", this.appMain._scene);
     mat.diffuseColor = BABYLON.Color3.Green();
 
     // Our built-in 'box' shape. Params: name, options, scene
-    this.appMain.box = BABYLON.MeshBuilder.CreateBox("box", {});
+    const box = BABYLON.MeshBuilder.CreateBox("box", {});
 
-    this.appMain.box.material = mat;
+    box.material = mat;
 
-    this.appMain.box.scaling = new BABYLON.Vector3(0.5, 1.5, 0.5);
+    box.scaling = new BABYLON.Vector3(0.5, 1.5, 0.5);
 
-    this.appMain.box.position.y = this.appMain.box.scaling.y / 2; //box created with default size so height is 1
-    this.appMain.box.position.z = -4;
-    this.appMain.box.position.x = -4;
+    box.position.y = box.scaling.y / 2; //box created with default size so height is 1
+    box.position.z = -4;
+    box.position.x = -4;
 
     // Move the sphere upward 1/2 its height
     //this.appMain.box.position.y = 2;    //this.appMain.box.position = new BABYLON.Vector3(0, 0.5, -5);
@@ -39,9 +39,9 @@ export default class MySceneObjects {
 
     const meshPosition = new BABYLON.Vector3(0, 0.7, -0.5);
     const meshScaling = new BABYLON.Vector3(
-      1 / this.appMain.box.scaling.x,
-      1 / this.appMain.box.scaling.y,
-      1 / this.appMain.box.scaling.z
+      1 / box.scaling.x,
+      1 / box.scaling.y,
+      1 / box.scaling.z
     );
 
     var textMesh = this.appMain.METHMod.DisplayText(
@@ -54,7 +54,9 @@ export default class MySceneObjects {
     );
     textMesh.position = meshPosition;
     textMesh.scaling = meshScaling;
-    textMesh.parent = this.appMain.box;
+    textMesh.parent = box;
+
+    return box;
   }
 
   SpawnButton(): void {
@@ -90,8 +92,8 @@ export default class MySceneObjects {
     });
   }
 
-  SpawnButtonWheelAnimation(): void {
-    this.appMain.METHMod.DMM("SpawnButtonWheelAnimation");
+  SpawnButtonAnimation(): void {
+    this.appMain.METHMod.DMM("SpawnButtonAnimation");
 
     var manager = new GUI.GUI3DManager();
     // Text only button
@@ -106,7 +108,7 @@ export default class MySceneObjects {
 
     touchHoloTextButton.position = new BABYLON.Vector3(2.25, 0.125, -4.25);
     touchHoloTextButton.scaling = new BABYLON.Vector3(0.25, 0.25, 0.25);
-    touchHoloTextButton.mesh.rotation.y = BABYLON.Tools.ToRadians(45);
+    //touchHoloTextButton.mesh.rotation.y = BABYLON.Tools.ToRadians(45);
 
     const unClicked = "Click Wheels! On";
     touchHoloTextButton.text = unClicked;
@@ -114,6 +116,7 @@ export default class MySceneObjects {
     touchHoloTextButton.onPointerDownObservable.add(async () => {
       this.appMain.METHMod.PlaySound();
       this.appMain.ACTMod.ToggleWheelAnimation();
+      this.appMain.ACTMod.ToggleObjectAnimation(this.appMain.car);
 
       if (touchHoloTextButton.text === unClicked) {
         touchHoloTextButton.imageUrl = onTexture;

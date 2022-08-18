@@ -34,12 +34,16 @@ export default class MyScene {
   // OBJECTS
   ////////////////////////////////
 
-  public box: BABYLON.Mesh;
+  public box: BABYLON.Mesh[] = [undefined, undefined, undefined, undefined];
+  public boxMat: BABYLON.StandardMaterial[] = [undefined, undefined, undefined, undefined];
   //public barn: BABYLON.Mesh[] = [undefined];
 
   //public object: BABYLON.AbstractMesh[] = [undefined, undefined, undefined];
 
+  public car: BABYLON.Mesh = undefined;
+  public animCar: BABYLON.Animation;
   public wheels: BABYLON.Mesh[] = [undefined, undefined, undefined, undefined];
+  public isObjectMoving = false;
   public isWheelsSpinning = false;
 
   public ground: BABYLON.Mesh;
@@ -96,7 +100,30 @@ export default class MyScene {
   // Code for Scene
 
   async StartScene(): Promise<void> {
-    this.OBJMod.SpawnTestBox();
+
+    this.box[0] = this.OBJMod.SpawnTestBox();
+    this.box[0].position.z = this.box[0].position.z + 1.5
+    
+    this.box[1] = this.OBJMod.SpawnTestBox();
+    this.box[1].position.z = this.box[0].position.z - 2
+    this.boxMat[1] = new BABYLON.StandardMaterial("boxMat1",this._scene);
+    this.boxMat[1].diffuseColor = BABYLON.Color3.Blue();
+    this.box[1].material = this.boxMat[1];
+
+    this.box[2] = this.OBJMod.SpawnTestBox();
+    this.box[2].position.z = this.box[0].position.z
+    this.box[2].position.x = 4
+    this.boxMat[2] = new BABYLON.StandardMaterial("boxMat1",this._scene);
+    this.boxMat[2].diffuseColor = BABYLON.Color3.Yellow();
+    this.box[2].material = this.boxMat[2];
+
+    this.box[3] = this.OBJMod.SpawnTestBox();
+    this.box[3].position.z = this.box[1].position.z
+    this.box[3].position.x = 4
+    this.boxMat[3] = new BABYLON.StandardMaterial("boxMat1",this._scene);
+    this.boxMat[3].diffuseColor = BABYLON.Color3.Red();
+    this.box[3].material = this.boxMat[3];
+
 
     this.OBJMod.SpawnButton();
 
@@ -112,10 +139,10 @@ export default class MyScene {
     extText.rotation.x = BABYLON.Tools.ToRadians(90);
     extText.scaling = new BABYLON.Vector3(3, 3, 3);
 
-    const car = this.OBJMod.BuildCar();
-    car.position = new BABYLON.Vector3(2.25, 1.75, -4);
-    car.rotation.y = BABYLON.Tools.ToRadians(45);
+    this.car = this.OBJMod.BuildCar();
+    this.car.position = new BABYLON.Vector3(2.25, 1.75, -4);
+    //this.car.rotation.y = BABYLON.Tools.ToRadians(45);
 
-    this.OBJMod.SpawnButtonWheelAnimation();
+    this.OBJMod.SpawnButtonAnimation();
   }
 }
