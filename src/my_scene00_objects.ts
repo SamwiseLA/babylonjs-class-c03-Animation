@@ -115,7 +115,7 @@ export default class MySceneObjects {
     touchHoloTextButton.imageUrl = offTexture;
     touchHoloTextButton.onPointerDownObservable.add(async () => {
       this.appMain.METHMod.PlaySound();
-      this.appMain.ACTMod.ToggleWheelAnimation();
+      this.appMain.ACTMod.ToggleWheelAnimation(0);
       this.appMain.ACTMod.ToggleObjectAnimation(this.appMain.car[0]);
 
       if (touchHoloTextButton.text === unClicked) {
@@ -128,10 +128,12 @@ export default class MySceneObjects {
           1
         );
       } else {
-        await this.appMain.METHMod.sound[1].dispose();
+        this.appMain.METHMod.sound[1].dispose();
         touchHoloTextButton.text = unClicked;
         touchHoloTextButton.imageUrl = offTexture;
       }
+
+      console.log(this.appMain.METHMod.sound);
     });
   }
 
@@ -157,7 +159,7 @@ export default class MySceneObjects {
     touchHoloTextButton.text = unClicked;
     touchHoloTextButton.imageUrl = offTexture;
     touchHoloTextButton.onPointerDownObservable.add(async () => {
-      this.appMain.METHMod.PlaySound();
+      this.appMain.METHMod.PlaySound(); // Click (0)
       this.appMain.ACTMod.ToggleWheelAnimation(1);
       this.appMain.ACTMod.ToggleObjectAnimation(this.appMain.car[1]);
 
@@ -168,13 +170,15 @@ export default class MySceneObjects {
           "https://dl.dropbox.com/s/3ug19nwt5oiea2n/ford-v8-5-liter-engine.wav",
           undefined,
           true,
-          1
+          2
         );
       } else {
-        this.appMain.METHMod.sound[1].dispose();
+        this.appMain.METHMod.sound[2].dispose();
         touchHoloTextButton.text = unClicked;
         touchHoloTextButton.imageUrl = offTexture;
       }
+
+      console.log(this.appMain.METHMod.sound);
     });
   }
 
@@ -264,7 +268,6 @@ export default class MySceneObjects {
   }
 
   async BuildCarFromMeshObject(): Promise<void> {
-
     this.appMain.METHMod.DMM("BuildCarFromMeshObject");
 
     await BABYLON.SceneLoader.ImportMeshAsync(

@@ -107,7 +107,7 @@ export default class MySceneMethods {
 
     if (this.sound !== undefined) {
       if (this.sound[soundIndex] !== undefined) {
-        await this.sound[soundIndex].dispose();
+        this.sound[soundIndex].dispose();
       }
     }
 
