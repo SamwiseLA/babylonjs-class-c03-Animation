@@ -232,6 +232,11 @@ export default class MySceneObjects {
 
     carBodyText.scaling = new BABYLON.Vector3(3, 3, 3);
 
+    const carBodyText2 = carBodyText.clone()
+    carBodyText2.position.y = -2.05;
+    carBodyText2.rotation.x = BABYLON.Tools.ToRadians(270)
+    carBodyText2.rotation.z = BABYLON.Tools.ToRadians(180)
+    
     this.appMain.wheels[0][0] = this.BuildWheels(carBodyLen / 4, 0.4);
     this.appMain.wheels[0][0].parent = carBodyMesh;
     this.appMain.wheels[0][0].name = "wheelLF0";
@@ -313,6 +318,12 @@ export default class MySceneObjects {
     carBodyText.rotation.x = BABYLON.Tools.ToRadians(90);
 
     carBodyText.scaling = new BABYLON.Vector3(-3, -3, -3);
+
+    const carBodyText2 = carBodyText.clone()
+    carBodyText2.position.y = .05;
+    carBodyText2.rotation.x = BABYLON.Tools.ToRadians(270)
+    carBodyText2.rotation.z = BABYLON.Tools.ToRadians(180)
+
 
     return;
   }
