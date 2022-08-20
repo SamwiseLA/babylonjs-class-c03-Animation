@@ -110,17 +110,17 @@ export default class MySceneObjects {
     touchHoloTextButton.scaling = new BABYLON.Vector3(0.25, 0.25, 0.25);
     //touchHoloTextButton.mesh.rotation.y = BABYLON.Tools.ToRadians(45);
 
-    const unClicked = "Click Wheels! On";
+    const unClicked = "Click Car 1! On";
     touchHoloTextButton.text = unClicked;
     touchHoloTextButton.imageUrl = offTexture;
     touchHoloTextButton.onPointerDownObservable.add(async () => {
       this.appMain.METHMod.PlaySound();
       this.appMain.ACTMod.ToggleWheelAnimation();
-      this.appMain.ACTMod.ToggleObjectAnimation(this.appMain.car);
+      this.appMain.ACTMod.ToggleObjectAnimation(this.appMain.car[0]);
 
       if (touchHoloTextButton.text === unClicked) {
         touchHoloTextButton.imageUrl = onTexture;
-        touchHoloTextButton.text = "Click Wheels! Off";
+        touchHoloTextButton.text = "Click Car 1! Off";
         this.appMain.METHMod.PlaySound(
           "https://dl.dropbox.com/s/3ug19nwt5oiea2n/ford-v8-5-liter-engine.wav",
           undefined,
@@ -129,6 +129,49 @@ export default class MySceneObjects {
         );
       } else {
         await this.appMain.METHMod.sound[1].dispose();
+        touchHoloTextButton.text = unClicked;
+        touchHoloTextButton.imageUrl = offTexture;
+      }
+    });
+  }
+
+  SpawnButtonAnimation2(): void {
+    this.appMain.METHMod.DMM("SpawnButtonAnimation2");
+
+    var manager = new GUI.GUI3DManager();
+    // Text only button
+
+    const onTexture =
+      "https://raw.githubusercontent.com/microsoft/MixedRealityToolkit-Unity/main/Assets/MRTK/SDK/StandardAssets/Textures/IconSwitchOn.png";
+    const offTexture =
+      "https://raw.githubusercontent.com/microsoft/MixedRealityToolkit-Unity/main/Assets/MRTK/SDK/StandardAssets/Textures/IconSwitchOff.png";
+
+    var touchHoloTextButton = new GUI.HolographicButton("TouchHoloTextButton");
+    manager.addControl(touchHoloTextButton);
+
+    touchHoloTextButton.position = new BABYLON.Vector3(2.5, 0.125, -4.25);
+    touchHoloTextButton.scaling = new BABYLON.Vector3(0.25, 0.25, 0.25);
+    //touchHoloTextButton.mesh.rotation.y = BABYLON.Tools.ToRadians(45);
+
+    const unClicked = "Click Car 2! On";
+    touchHoloTextButton.text = unClicked;
+    touchHoloTextButton.imageUrl = offTexture;
+    touchHoloTextButton.onPointerDownObservable.add(async () => {
+      this.appMain.METHMod.PlaySound();
+      this.appMain.ACTMod.ToggleWheelAnimation(1);
+      this.appMain.ACTMod.ToggleObjectAnimation(this.appMain.car[1]);
+
+      if (touchHoloTextButton.text === unClicked) {
+        touchHoloTextButton.imageUrl = onTexture;
+        touchHoloTextButton.text = "Click Car 2! Off";
+        this.appMain.METHMod.PlaySound(
+          "https://dl.dropbox.com/s/3ug19nwt5oiea2n/ford-v8-5-liter-engine.wav",
+          undefined,
+          true,
+          1
+        );
+      } else {
+        this.appMain.METHMod.sound[1].dispose();
         touchHoloTextButton.text = unClicked;
         touchHoloTextButton.imageUrl = offTexture;
       }
@@ -169,6 +212,9 @@ export default class MySceneObjects {
       -3,
       -3
     );
+
+    carBodyMesh.name = `${carBodyMesh.name}0`;
+
     carBodyMesh.material = carMat;
 
     carBodyMesh.scaling = new BABYLON.Vector3(0.5, 0.5, 0.5);
@@ -182,28 +228,90 @@ export default class MySceneObjects {
 
     carBodyText.scaling = new BABYLON.Vector3(3, 3, 3);
 
-    this.appMain.wheels[0] = this.BuildWheels(carBodyLen / 4, 0.4);
-    this.appMain.wheels[0].parent = carBodyMesh;
-    this.appMain.wheels[0].name = "wheelLF";
-    this.appMain.wheels[0].material = wheelMat;
-    this.appMain.wheels[0].position.x =
+    this.appMain.wheels[0][0] = this.BuildWheels(carBodyLen / 4, 0.4);
+    this.appMain.wheels[0][0].parent = carBodyMesh;
+    this.appMain.wheels[0][0].name = "wheelLF0";
+    this.appMain.wheels[0][0].material = wheelMat;
+    this.appMain.wheels[0][0].position.x =
       carBodyMesh.position.x + (carBodyLen + carFrontLen) / 2 - carBodyLen / 4;
-    this.appMain.wheels[0].position.y = -carBodyDepth;
-    this.appMain.wheels[0].position.z = -3;
+    this.appMain.wheels[0][0].position.y = -carBodyDepth;
+    this.appMain.wheels[0][0].position.z = -3;
 
-    this.appMain.wheels[1] = this.appMain.wheels[0].clone("wheelLB");
-    this.appMain.wheels[1].position.x = -this.appMain.wheels[0].position.x;
-    //Bthis.appMain._scene.beginAnimation(this.appMain.wheels[1], 0, 30, true);
+    this.appMain.wheels[0][1] = this.appMain.wheels[0][0].clone(
+      "wheelLB0",
+      carBodyMesh
+    );
+    this.appMain.wheels[0][1].position.x =
+      -this.appMain.wheels[0][0].position.x;
+    //this.appMain._scene.beginAnimation(this.appMain.wheels[0][1], 0, 0, false);
 
-    this.appMain.wheels[2] = this.appMain.wheels[0].clone("wheelRF");
-    this.appMain.wheels[2].position.y = 0;
-    //this.appMain._scene.beginAnimation(this.appMain.wheels[2], 0, 30, true);
+    this.appMain.wheels[0][2] = this.appMain.wheels[0][0].clone(
+      "wheelRF0",
+      carBodyMesh
+    );
+    this.appMain.wheels[0][2].position.y = 0;
+    //this.appMain._scene.beginAnimation(this.appMain.wheels[0][2], 0, 0, false);
 
-    this.appMain.wheels[3] = this.appMain.wheels[2].clone("wheelLB");
-    this.appMain.wheels[3].position.x = -this.appMain.wheels[2].position.x;
-    //this.appMain._scene.beginAnimation(this.appMain.wheels[3], 0, 30, true);
+    this.appMain.wheels[0][3] = this.appMain.wheels[0][2].clone(
+      "wheelRB0",
+      carBodyMesh
+    );
+    this.appMain.wheels[0][3].position.x =
+      -this.appMain.wheels[0][2].position.x;
+    //this.appMain._scene.beginAnimation(this.appMain.wheels[0][3], 0, 0, false);
 
     return carBodyMesh;
+  }
+
+  async BuildCarFromMeshObject(): Promise<void> {
+
+    this.appMain.METHMod.DMM("BuildCarFromMeshObject");
+
+    await BABYLON.SceneLoader.ImportMeshAsync(
+      "",
+      "https://dl.dropbox.com/s/7xua5szli0k5hp0/",
+      "as_car.glb"
+    ).then(() => {
+      const wheelLF = (this.appMain.wheels[1][0] =
+        this.appMain._scene.getMeshByName("wheelLF"));
+      const wheelLB = (this.appMain.wheels[1][1] =
+        this.appMain._scene.getMeshByName("wheelLB"));
+      const wheelRF = (this.appMain.wheels[1][2] =
+        this.appMain._scene.getMeshByName("wheelRF"));
+      const wheelRB = (this.appMain.wheels[1][3] =
+        this.appMain._scene.getMeshByName("wheelRB"));
+      console.log(this.appMain.wheels[1][0].animations);
+      //this.appMain._scene.beginAnimation(wheelLF, 0, 30, true);
+      //this.appMain._scene.beginAnimation(wheelLB, 0, 30, true);
+      //this.appMain._scene.beginAnimation(wheelRF, 0, 30, true);
+      //this.appMain._scene.beginAnimation(wheelRB, 0, 30, true);
+
+      this.appMain._scene.beginAnimation(wheelLF, 0, 0, false);
+      this.appMain._scene.beginAnimation(wheelLB, 0, 0, false);
+      this.appMain._scene.beginAnimation(wheelRF, 0, 0, false);
+      this.appMain._scene.beginAnimation(wheelRB, 0, 0, false);
+    });
+
+    const meshes = this.appMain._scene.getActiveMeshes();
+    //this.appMain.car[1] = this.appMain._scene.getMeshByName("extrudeMesh");
+    const meshesByID = this.appMain._scene.getMeshesByID("extrudeMesh");
+    this.appMain.car[1] = meshesByID[2];
+    this.appMain.car[1].rotation.y = BABYLON.Tools.ToRadians(90);
+
+    //this.appMain.car[1].name = `${this.appMain.car[1].name}1`
+    this.appMain.car[1].name = `${this.appMain.car[1].name}1`;
+
+    const carBodyText = this.appMain.METHMod.DisplayText(
+      " ImportMesh for Car2 "
+    );
+    carBodyText.parent = this.appMain.car[1];
+    carBodyText.position.y = -2.05;
+    carBodyText.position.z = 2.8;
+    carBodyText.rotation.x = BABYLON.Tools.ToRadians(90);
+
+    carBodyText.scaling = new BABYLON.Vector3(-3, -3, -3);
+
+    return;
   }
 
   BuildWheels(diam = 0.125, hgt = 0.05): BABYLON.Mesh {

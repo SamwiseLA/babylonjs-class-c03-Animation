@@ -40,11 +40,11 @@ export default class MyScene {
 
   //public object: BABYLON.AbstractMesh[] = [undefined, undefined, undefined];
 
-  public car: BABYLON.Mesh = undefined;
-  public animCar: BABYLON.Animation;
-  public wheels: BABYLON.Mesh[] = [undefined, undefined, undefined, undefined];
-  public isObjectMoving = false;
-  public isWheelsSpinning = false;
+  public car: BABYLON.AbstractMesh[] = [undefined, undefined];
+  public animCar: BABYLON.Animation[] = [undefined];
+  public wheels: BABYLON.AbstractMesh[][] = [[undefined, undefined, undefined, undefined],[undefined, undefined, undefined, undefined]];
+  public isObjectMoving = [false, false];
+  public isWheelsSpinning = [false, false];
 
   public ground: BABYLON.Mesh;
   public music: BABYLON.Sound;
@@ -139,10 +139,15 @@ export default class MyScene {
     extText.rotation.x = BABYLON.Tools.ToRadians(90);
     extText.scaling = new BABYLON.Vector3(3, 3, 3);
 
-    this.car = this.OBJMod.BuildCar();
-    this.car.position = new BABYLON.Vector3(2.25, 1.75, -4);
+    this.car[0] = this.OBJMod.BuildCar();
+    this.car[0].position = new BABYLON.Vector3(2.25, 1.75, -4);
     //this.car.rotation.y = BABYLON.Tools.ToRadians(45);
 
+    await this.OBJMod.BuildCarFromMeshObject();
+
+    this.car[1].position = new BABYLON.Vector3(-2.25, 1.75, 0);
+
     this.OBJMod.SpawnButtonAnimation();
+    this.OBJMod.SpawnButtonAnimation2();
   }
 }
